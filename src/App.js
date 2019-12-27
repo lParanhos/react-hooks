@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 
 function App() {
 
@@ -44,13 +44,20 @@ function App() {
     localStorage.setItem('tech', JSON.stringify(techs))
   }, [techs]);
 
+  /** Usamos o useMemo, basicamente, quando precisamos fazer alguns calculos baseados em x variaves/estados do 
+   * nosso componente. Pois assim evitamos que o nossa função seja executada sempre que o render é chamado
+   */
 
+  /**Nossa função de techs.length, só será executada, no caso, quando nosso estado techs, for alterado */
+  const techSize = useMemo(() => techs.length, [techs])
 
   return (
     <>
       <ul>
         {techs.map(tech => <li>{tech}</li>)}
       </ul>
+      <strong>Você tem {techSize} tecnologias</strong>
+      <br />
       <input type="text" value={newTech} onChange={(e) => setNewTech(e.target.value)} />
       <button type="button" onClick={addTech}>ADICIONAR</button>
     </>
