@@ -1,11 +1,6 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 
 function App() {
-
-  function addTech() {
-    setTech([...techs, newTech]);
-    setNewTech('');
-  }
 
   /** Fazemos uma desestruturação do useState
    * pois o mesmo nos retorna no primeiro parametro o nosso estado,
@@ -13,7 +8,21 @@ function App() {
    */
   const [techs, setTech] = useState([]);
 
-  const [newTech, setNewTech] = useState('')
+  const [newTech, setNewTech] = useState('');
+
+  /** UsecallBack é semelhante ao useMemo, só que, ao invés de retornar um único valor, ele retorna uma função
+  * 
+  * O que acontece é que, sempre que nossos estados são alterados, nossas funções são remontadas.
+  * Gastando muito processamento do nosso javascript. 
+  * Com o useCallback conseguimos controlar nossa função para ser remontada apenas quando alguma das
+  * váriaveis do array em que estamos dependentes for alterada. Limitando a quantidade de vezes que nossa função
+  * foi recriada do zero.
+  */
+
+ const addTech = useCallback(() => {
+  setTech([...techs, newTech]);
+  setNewTech('');
+}, [newTech, techs]);
 
   /** O useEffect veio para substituir os ciclos de vida de um componente baseado em classe, 
    * por exemplo: componentDidMount, componentDidUpdate e componentWillUnMount.
@@ -47,6 +56,8 @@ function App() {
   /** Usamos o useMemo, basicamente, quando precisamos fazer alguns calculos baseados em x variaves/estados do 
    * nosso componente. Pois assim evitamos que o nossa função seja executada sempre que o render é chamado
    */
+
+
 
   /**Nossa função de techs.length, só será executada, no caso, quando nosso estado techs, for alterado */
   const techSize = useMemo(() => techs.length, [techs])
